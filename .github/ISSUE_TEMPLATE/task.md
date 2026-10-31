@@ -7,7 +7,7 @@ labels: chore
 ## Description
 
 ## Belongs to story
-#
+Story: #
 
 ## Definition of done
 - [ ] Implemented
