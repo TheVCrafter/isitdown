@@ -7,9 +7,11 @@ labels: chore
 ## Description
 
 ## Belongs to story
+
 Story: #
 
 ## Definition of done
+
 - [ ] Implemented
 - [ ] Tests added or updated
 - [ ] CI green

@@ -5,10 +5,12 @@ labels: user-story
 ---
 
 ## Story
+
 As a <role>, I want <goal> so that <benefit>.
 
 ## Acceptance criteria
-- [ ] 
-- [ ] 
+
+- [ ]
+- [ ]
 
 ## Notes
