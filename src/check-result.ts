@@ -18,3 +18,10 @@ export type Failed = {
 };
 
 export type CheckResult = Responded | Failed;
+
+export function statusFromHttpCode(httpStatus: number): CheckStatus {
+  if (httpStatus >= 200 && httpStatus < 400) {
+    return "up";
+  }
+  return "down";
+}
