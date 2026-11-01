@@ -9,6 +9,7 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 - Requirements are managed on a GitHub Project board (`IsItDown?`), linked to the repository.
 - Statuses: Backlog, Todo, In Progress, In Review, Done. The board workflows add new issues to Backlog and move them to Done when an issue is closed or its pull request is merged.
 - Issue templates for user stories and tasks, plus six labels (`user-story`, `feature`, `ci`, `docs`, `chore`, `bug`).
+- Three user stories with acceptance criteria: [#7](https://github.com/TheVCrafter/isitdown/issues/7) (check whether a website is up or down), [#8](https://github.com/TheVCrafter/isitdown/issues/8) (history and uptime) and [#9](https://github.com/TheVCrafter/isitdown/issues/9) (automated testing, build and deployment). Each story is broken into five sub-issues (#10 to #14, #15 to #19 and #20 to #24), so its progress is visible on the story. Three more issues (#25 to #27) cover the requirements tool comparison, the development environment extension and the final documentation.
 - Traceability example: issue [#2](https://github.com/TheVCrafter/isitdown/issues/2) (CI workflow) → branch `ci/2-add-workflow` → pull request [#3](https://github.com/TheVCrafter/isitdown/pull/3) with `Closes #2` → merged → issue closed and moved to Done automatically.
 
 ![Project board with issues #1 and #2 in the Done column](images/a1-board-overview.png)
@@ -19,8 +20,8 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 
 **Open**
 
-- User stories and the breakdown into issues for the monitoring features.
-- Comparison of requirements management tools.
+- Comparison of requirements management tools (#25).
+- A board screenshot that shows the stories with their sub-issues and progress.
 
 ## B1: Development environment
 
@@ -33,7 +34,7 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 
 **Open**
 
-- An extension beyond the basic setup (for example pre-commit hooks or a devcontainer), documented with its reason.
+- An extension beyond the basic setup (for example pre-commit hooks or a devcontainer), documented with its reason (#26).
 
 ## C1: Source and artifact management
 
@@ -51,11 +52,16 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 
 **Open**
 
-- Artifact management: a versioned build output created by the pipeline and linked to its source.
+- Artifact management: a versioned build output created by the pipeline and linked to its source (#22).
 
 ## D1: Integration and testing
 
 **Done**
+
+- Unit tests for the check logic (status rule, URL validation, the check with fake `fetch` functions for 2xx, 3xx, 4xx, 5xx, network error and timeout, and the output format). None of them use the real network.
+- Demonstration of the story "Check whether a website is up or down":
+
+![Command line run showing an up result, a down result with its error, a rejected input and the usage hint](images/d1-cli-output.png)
 
 - The pipeline runs format check, lint, typecheck, build and tests on every pull request and on every push to `main` ([workflow file](../.github/workflows/ci.yml)).
 - A passing run on pull request #3:
@@ -68,9 +74,9 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 
 **Open**
 
-- Tests for the monitoring logic (currently only a placeholder test exists).
-- An automated integration test that runs in the pipeline.
+- Tests for storage and uptime (#15 to #18).
+- An automated integration test that runs in the pipeline (#20).
 
 ## E1: Deployment
 
-Not started yet.
+Not started yet. Planned in #21 (hosting decision), #23 (automatic deployment) and #24 (health check).
