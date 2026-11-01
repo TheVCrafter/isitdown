@@ -19,3 +19,6 @@
 | 2026-11-01 | Every check result carries its `url`                                                    | A result stands on its own when it is stored or displayed                                     |
 | 2026-11-01 | Timestamps are ISO 8601 strings                                                         | Easy to store as text and to compare in tests                                                 |
 | 2026-11-01 | HTTP 200 to 399 is up; everything else is down; a failed check is always down           | Matches the acceptance criteria of the story; redirects count as a working site               |
+| 2026-11-01 | URLs must include `http://` or `https://`; input without a protocol is rejected         | Matches the story's "valid http or https URL" and avoids guessing a protocol                  |
+| 2026-11-01 | URLs are parsed with the built-in `URL` class, and the normalized `href` is stored      | Standard parsing without regular expressions; one consistent form per address                 |
+| 2026-11-01 | `validateUrl` returns a result object instead of throwing                               | Invalid input is expected, not exceptional; same pattern as `CheckResult`                     |
