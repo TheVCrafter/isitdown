@@ -6,7 +6,7 @@ A website monitoring tool (downdetector) written in TypeScript. School project f
 
 ## Status
 
-Project setup, CI pipeline and branch protection are done. A command line tool checks whether websites are up or down. Storage, history, the integration test, artifact publishing and deployment are not implemented yet.
+Project setup, CI pipeline and branch protection are done. A command line tool checks whether websites are up or down, and a SQLite storage for check results exists but is not connected to the tool yet. History, uptime, the integration test, artifact publishing and deployment are not implemented yet.
 
 ## Requirements
 
@@ -24,14 +24,15 @@ npm install
 
 ## Scripts
 
-| Script                 | Purpose                         |
-| ---------------------- | ------------------------------- |
-| `npm run lint`         | Lint with ESLint                |
-| `npm run format`       | Format all files with Prettier  |
-| `npm run format:check` | Check formatting without change |
-| `npm run typecheck`    | Type check without emitting     |
-| `npm run build`        | Compile TypeScript to `dist/`   |
-| `npm run test`         | Run the tests once with Vitest  |
+| Script                 | Purpose                                          |
+| ---------------------- | ------------------------------------------------ |
+| `npm run lint`         | Lint with ESLint                                 |
+| `npm run format`       | Format all files with Prettier                   |
+| `npm run format:check` | Check formatting without change                  |
+| `npm run typecheck`    | Type check source and tests without emitting     |
+| `npm run build`        | Compile `src/` to `dist/`                        |
+| `npm run test`         | Run the tests once with Vitest                   |
+| `npm start`            | Run the compiled command line tool (after build) |
 
 ## Usage
 

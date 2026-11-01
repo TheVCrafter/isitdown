@@ -59,6 +59,7 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 **Done**
 
 - Unit tests for the check logic (status rule, URL validation, the check with fake `fetch` functions for 2xx, 3xx, 4xx, 5xx, network error and timeout, and the output format). None of them use the real network.
+- Tests for the SQLite storage use an in-memory database: a responded and a failed result come back unchanged, the history is newest first, results are separated by URL, and an unknown URL returns an empty list. One test uses a temporary file database to show that results survive closing and reopening it.
 - Demonstration of the story "Check whether a website is up or down":
 
 ![Command line run showing an up result, a down result with its error, a rejected input and the usage hint](images/d1-cli-output.png)
@@ -74,7 +75,7 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 
 **Open**
 
-- Tests for storage and uptime (#15 to #18).
+- Tests for uptime (#18).
 - An automated integration test that runs in the pipeline (#20).
 
 ## E1: Deployment
