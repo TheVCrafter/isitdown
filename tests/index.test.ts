@@ -3,6 +3,6 @@ import { APP_NAME } from "../src/index.js";
 
 describe("placeholder", () => {
   it("exports the app name", () => {
-    expect(APP_NAME).toBe("IsItDown?");
+    expect(APP_NAME).toBe("wrong");
   });
 });
