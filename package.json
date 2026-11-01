@@ -19,7 +19,7 @@
   "keywords": [],
   "type": "module",
   "engines": {
-    "node": ">=22"
+    "node": ">=24"
   },
   "bugs": {
     "url": "https://github.com/TheVCrafter/isitdown/issues"

@@ -10,7 +10,7 @@ Project setup, CI pipeline and branch protection are done. A command line tool c
 
 ## Requirements
 
-- Node.js 22 or newer
+- Node.js 24 or newer
 - npm
 - Git
 
