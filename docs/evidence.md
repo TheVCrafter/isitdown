@@ -19,9 +19,10 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 
 ![Repository labels with descriptions](images/a1-labels.png)
 
+- Comparison of requirements management tools: GitHub Projects, Jira and Trello are compared on the link to the code, the structure of requirements, automation, visibility, and cost and setup. The recommendation is GitHub Projects, because the requirements and the code are in the same system. The comparison is in [requirements tools](requirements-tools.md), with the date the plan limits were checked and its sources.
+
 **Open**
 
-- Comparison of requirements management tools (#25).
 - A board screenshot that shows the stories with their sub-issues and progress.
 
 ## B1: Development environment
@@ -90,7 +91,7 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 
 - Demonstration of the story "See the history and uptime of a monitored website": the page shows the uptime and the list of results of a monitored URL.
 
-![History page showing the uptime and the results of a monitored URL](images/d1-history-page.png)
+![History page showing the uptime and the list of results of a monitored URL](images/d1-history-page.png)
 
 - The pipeline runs two jobs on every pull request and on every push to `main`: `build-and-test` (format check, lint, typecheck, build and unit tests) and `integration-test` ([workflow file](../.github/workflows/ci.yml)).
 - A passing run on pull request #3:

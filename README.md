@@ -95,7 +95,7 @@ src/                        application code
 tests/                      unit tests (Vitest)
 tests/integration/          integration test with a local target server
 deploy/                     script that sets up and starts the app on the server
-docs/                       decisions, evidence, hosting, TypeScript notes
+docs/                       decisions, evidence, hosting, requirements tools, TypeScript notes
 .github/workflows/          CI and release pipelines
 .github/ISSUE_TEMPLATE/     user story and task templates
 ```
@@ -121,6 +121,7 @@ A separate release workflow runs when a version tag is pushed. It publishes the 
 - [Decisions](docs/decisions.md)
 - [Evidence per competency](docs/evidence.md)
 - [Hosting](docs/hosting.md)
+- [Requirements tools](docs/requirements-tools.md)
 - [TypeScript notes](docs/typescript-notes.md)
 
 ## License
