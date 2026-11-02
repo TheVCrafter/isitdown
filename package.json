@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "build": "tsc -p tsconfig.build.json",
     "test": "vitest run",
-    "start": "node dist/cli.js"
+    "start": "node dist/cli.js",
+    "monitor": "node dist/monitor.js"
   },
   "repository": {
     "type": "git",

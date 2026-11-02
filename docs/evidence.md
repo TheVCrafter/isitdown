@@ -10,6 +10,7 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 - Statuses: Backlog, Todo, In Progress, In Review, Done. The board workflows add new issues to Backlog and move them to Done when an issue is closed or its pull request is merged.
 - Issue templates for user stories and tasks, plus six labels (`user-story`, `feature`, `ci`, `docs`, `chore`, `bug`).
 - Three user stories with acceptance criteria: [#7](https://github.com/TheVCrafter/isitdown/issues/7) (check whether a website is up or down), [#8](https://github.com/TheVCrafter/isitdown/issues/8) (history and uptime) and [#9](https://github.com/TheVCrafter/isitdown/issues/9) (automated testing, build and deployment). Each story is broken into five sub-issues (#10 to #14, #15 to #19 and #20 to #24), so its progress is visible on the story. Three more issues (#25 to #27) cover the requirements tool comparison, the development environment extension and the final documentation.
+- Story #7 is finished: its sub-issues were closed by pull requests (#13 was closed with a comment that links to the tests that cover it), and the story was closed after its acceptance criteria were ticked.
 - Traceability example: issue [#2](https://github.com/TheVCrafter/isitdown/issues/2) (CI workflow) → branch `ci/2-add-workflow` → pull request [#3](https://github.com/TheVCrafter/isitdown/pull/3) with `Closes #2` → merged → issue closed and moved to Done automatically.
 
 ![Project board with issues #1 and #2 in the Done column](images/a1-board-overview.png)
@@ -29,6 +30,7 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 
 - Node.js, TypeScript (strict), ESLint, Prettier, Vitest and npm scripts for `lint`, `format`, `format:check`, `typecheck`, `build` and `test`.
 - Editor and line ending setup: `.editorconfig`, `.gitattributes`, `.prettierrc` and shared VS Code settings in `.vscode/settings.json`.
+- Two TypeScript configs: `tsconfig.json` covers `src` and `tests` for the editor and `typecheck`; `tsconfig.build.json` builds only `src`.
 - Setup steps for a fresh clone are in the [README](../README.md#setup); the reasons for the choices are in [decisions](decisions.md) and [TypeScript notes](typescript-notes.md).
 - Setup commit: [`56daa85`](https://github.com/TheVCrafter/isitdown/commit/56daa85).
 
@@ -60,6 +62,11 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 
 - Unit tests for the check logic (status rule, URL validation, the check with fake `fetch` functions for 2xx, 3xx, 4xx, 5xx, network error and timeout, and the output format). None of them use the real network.
 - Tests for the SQLite storage use an in-memory database: a responded and a failed result come back unchanged, the history is newest first, results are separated by URL, and an unknown URL returns an empty list. One test uses a temporary file database to show that results survive closing and reopening it.
+- Tests for the configuration and the scheduler: the interval setting accepts valid values and rejects invalid ones; the scheduler runs a round immediately, runs again after one interval, stops when asked, skips a tick while a round is still running, and reports a failing check or save without stopping the other URLs. The scheduler tests use fake timers and an in-memory storage.
+- A run of the monitor with a 5 second interval, followed by a query of the database: the stored results of both runs are in the same file, which shows that results survive a restart.
+
+![Stored check results of two separate runs of the monitor, read from the SQLite database](images/d1-monitor-storage.png)
+
 - Demonstration of the story "Check whether a website is up or down":
 
 ![Command line run showing an up result, a down result with its error, a rejected input and the usage hint](images/d1-cli-output.png)
