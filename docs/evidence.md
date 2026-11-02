@@ -75,7 +75,7 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 - Tests for the configuration and the scheduler: the interval and port settings accept valid values and reject invalid ones; the scheduler runs a round immediately, runs again after one interval, stops when asked, skips a tick while a round is still running, and reports a failing check or save without stopping the other URLs. The scheduler tests use fake timers and an in-memory storage.
 - Tests for the uptime calculation: an empty list and a list without results in the period return `null`; all up, all down, half up and two thirds up return 100, 0, 50 and 66.7; results older than the period and results after the current time are ignored; a result exactly at the start of the period counts; a failed check counts as down.
 - Tests for the history report and the selectable periods: the report contains only the results of the requested URL inside the period, newest first, with the matching uptime; the period names `1h`, `24h` and `7d` map to their durations, a missing period uses the default, and unknown names (including `constructor`) are rejected.
-- Tests for the history server start the real server on a free port and send real HTTP requests: the report for a stored URL, the default period, a URL without trailing slash, a missing or invalid URL, an unknown period, another path, a request that is not GET, the history page, and a failing storage that answers 500 without leaking the error message.
+- Tests for the history server start the real server on a free port and send real HTTP requests: the report for a stored URL, the health endpoint, the default period, a URL without trailing slash, a missing or invalid URL, an unknown period, another path, a request that is not GET, the history page, and a failing storage that answers 500 without leaking the error message.
 - An automated integration test runs the real checker, a real SQLite storage and the real history server against a local target server with four routes: a working page, a server error (500), a redirect, and a page that never answers. It checks the whole chain from the check to the report: the working page is up with 100 percent uptime, the server error is down with HTTP 500, the redirect is followed and reported as up, and the hanging page becomes a failed result that is stored and reported. The test runs as its own job in the pipeline, next to the unit tests, and needs no internet access.
 
 ![Pull request with two successful checks: build-and-test (required) and integration-test as a separate job](images/d1-ci-two-jobs.png)
@@ -103,7 +103,7 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 
 **Open**
 
-- None for now. The health check after a deployment is planned in #24 (E1).
+- None for now.
 
 ## E1: Deployment
 
@@ -120,6 +120,10 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 
 ![History page running on the server, showing the uptime and the results of a monitored website](images/e1-deployed-page.png)
 
+- Health check after the deployment: the application has a `/health` endpoint, and the deploy job calls it from the GitHub runner over the internet after the container starts. It retries for about a minute and fails the deployment if the application does not answer with a healthy status. After a failure, the job prints the container's last log lines. The check passed in the deployment of `v0.1.3`, which shows that the container runs, the application answers, and the port is reachable from outside.
+
+![Deploy job of the release v0.1.3: all steps successful, and the expanded health check step shows the application healthy on the first attempt](images/e1-health-check.png)
+
 **Open**
 
-- Health endpoint and post-deployment check (#24).
+- None for now.

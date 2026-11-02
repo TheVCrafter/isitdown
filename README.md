@@ -6,7 +6,7 @@ A website monitoring tool (downdetector) written in TypeScript. School project f
 
 ## Status
 
-Project setup, CI pipeline and branch protection are done. A command line tool checks whether websites are up or down. A monitor repeats the checks on a configurable interval, stores the results in SQLite, and serves a history page with the uptime and the results of each monitored URL. An automated integration test checks the whole chain. A release workflow publishes a versioned Docker image and deploys it to a Linux server; a health check after the deployment is not implemented yet.
+Project setup, CI pipeline and branch protection are done. A command line tool checks whether websites are up or down. A monitor repeats the checks on a configurable interval, stores the results in SQLite, and serves a history page with the uptime and the results of each monitored URL. An automated integration test checks the whole chain. A release workflow publishes a versioned Docker image, deploys it to a Linux server, and checks that the application is healthy afterwards.
 
 ## Requirements
 
@@ -52,7 +52,7 @@ npm run build
 npm run monitor -- https://example.com https://github.com
 ```
 
-The monitor checks the URLs immediately and then repeatedly, stores every result in a SQLite database, and serves a history page at `http://localhost:3000`. Enter a monitored URL and a period to see its uptime and results. The same data is available as JSON at `/api/history?url=<url>&period=<1h|24h|7d>`. Press Ctrl+C to stop it.
+The monitor checks the URLs immediately and then repeatedly, stores every result in a SQLite database, and serves a history page at `http://localhost:3000`. Enter a monitored URL and a period to see its uptime and results. The same data is available as JSON at `/api/history?url=<url>&period=<1h|24h|7d>`. A health check is available at `/health`. Press Ctrl+C to stop it.
 
 | Variable                 | Meaning                              | Default       |
 | ------------------------ | ------------------------------------ | ------------- |
@@ -62,10 +62,10 @@ The monitor checks the URLs immediately and then repeatedly, stores every result
 
 ## Docker image
 
-A release is created by pushing a version tag such as `v0.1.2`. The release workflow builds the image and publishes it to the GitHub container registry, tagged with the version and the commit.
+A release is created by pushing a version tag such as `v0.1.3`. The release workflow builds the image and publishes it to the GitHub container registry, tagged with the version and the commit.
 
 ```bash
-docker run --rm -p 3000:3000 -v isitdown-data:/data ghcr.io/thevcrafter/isitdown:0.1.2 https://example.com
+docker run --rm -p 3000:3000 -v isitdown-data:/data ghcr.io/thevcrafter/isitdown:0.1.3 https://example.com
 ```
 
 The URLs to monitor are passed as arguments. The database is stored in the volume `isitdown-data`, so the results survive restarts and new versions.
@@ -73,6 +73,8 @@ The URLs to monitor are passed as arguments. The database is stored in the volum
 ## Deployment
 
 Pushing a version tag starts the release workflow. It publishes the image and then deploys exactly that version to a Linux server over SSH. A script on the server creates a swap file, installs Docker if needed, pulls the image and starts the container with a persistent data volume.
+
+After the container starts, the workflow calls the `/health` endpoint from outside and fails the deployment if the application does not answer as healthy within about a minute.
 
 The workflow needs these settings in the repository:
 
@@ -112,7 +114,7 @@ docs/                       decisions, evidence, hosting, TypeScript notes
 
 GitHub Actions runs two jobs on every pull request and on every push to `main`. `build-and-test` runs the format check, lint, typecheck, build and the unit tests. `integration-test` runs the integration test on its own.
 
-A separate release workflow runs when a version tag is pushed. It publishes the Docker image and deploys it.
+A separate release workflow runs when a version tag is pushed. It publishes the Docker image, deploys it, and checks its health.
 
 ## Documentation
 
