@@ -6,7 +6,7 @@ A website monitoring tool (downdetector) written in TypeScript. School project f
 
 ## Status
 
-Project setup, CI pipeline and branch protection are done. A command line tool checks whether websites are up or down. A monitor repeats the checks on a configurable interval, stores the results in SQLite, and serves a history page with the uptime and the results of each monitored URL. An automated integration test checks the whole chain. A hosting decision is made (a Docker container on a Linux server), and a release workflow publishes a versioned Docker image; automatic deployment is not implemented yet.
+Project setup, CI pipeline and branch protection are done. A command line tool checks whether websites are up or down. A monitor repeats the checks on a configurable interval, stores the results in SQLite, and serves a history page with the uptime and the results of each monitored URL. An automated integration test checks the whole chain. A release workflow publishes a versioned Docker image and deploys it to a Linux server; a health check after the deployment is not implemented yet.
 
 ## Requirements
 
@@ -62,13 +62,29 @@ The monitor checks the URLs immediately and then repeatedly, stores every result
 
 ## Docker image
 
-A release is created by pushing a version tag such as `v0.1.1`. The release workflow builds the image and publishes it to the GitHub container registry, tagged with the version and the commit.
+A release is created by pushing a version tag such as `v0.1.2`. The release workflow builds the image and publishes it to the GitHub container registry, tagged with the version and the commit.
 
 ```bash
-docker run --rm -p 3000:3000 -v isitdown-data:/data ghcr.io/thevcrafter/isitdown:0.1.1 https://example.com
+docker run --rm -p 3000:3000 -v isitdown-data:/data ghcr.io/thevcrafter/isitdown:0.1.2 https://example.com
 ```
 
 The URLs to monitor are passed as arguments. The database is stored in the volume `isitdown-data`, so the results survive restarts and new versions.
+
+## Deployment
+
+Pushing a version tag starts the release workflow. It publishes the image and then deploys exactly that version to a Linux server over SSH. A script on the server creates a swap file, installs Docker if needed, pulls the image and starts the container with a persistent data volume.
+
+The workflow needs these settings in the repository:
+
+| Name                 | Type     | Meaning                                  |
+| -------------------- | -------- | ---------------------------------------- |
+| `DEPLOY_HOST`        | Secret   | Address of the server                    |
+| `DEPLOY_USER`        | Secret   | Login user on the server                 |
+| `DEPLOY_SSH_KEY`     | Secret   | Private key of the deployment key pair   |
+| `DEPLOY_KNOWN_HOSTS` | Secret   | Host key of the server, to verify it     |
+| `MONITOR_URLS`       | Variable | Websites to monitor, separated by spaces |
+
+The server and the choice of hosting are described in [Hosting](docs/hosting.md).
 
 ## Project structure
 
@@ -76,6 +92,7 @@ The URLs to monitor are passed as arguments. The database is stored in the volum
 src/                        application code
 tests/                      unit tests (Vitest)
 tests/integration/          integration test with a local target server
+deploy/                     script that sets up and starts the app on the server
 docs/                       decisions, evidence, hosting, TypeScript notes
 .github/workflows/          CI and release pipelines
 .github/ISSUE_TEMPLATE/     user story and task templates
@@ -95,7 +112,7 @@ docs/                       decisions, evidence, hosting, TypeScript notes
 
 GitHub Actions runs two jobs on every pull request and on every push to `main`. `build-and-test` runs the format check, lint, typecheck, build and the unit tests. `integration-test` runs the integration test on its own.
 
-A separate release workflow runs when a version tag is pushed and publishes the Docker image.
+A separate release workflow runs when a version tag is pushed. It publishes the Docker image and deploys it.
 
 ## Documentation
 
