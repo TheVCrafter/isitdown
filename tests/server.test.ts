@@ -165,4 +165,12 @@ describe("history server", () => {
     expect(response.headers.get("content-type")).toContain("text/html");
     expect(await response.text()).toContain("IsItDown?");
   });
+
+  it("serves the logo as an SVG image", async () => {
+    const response = await fetch(`${baseUrl}/logo.svg`);
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-type")).toBe("image/svg+xml");
+    expect(await response.text()).toContain("<svg");
+  });
 });
