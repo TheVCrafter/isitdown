@@ -17,7 +17,7 @@ Deploy a Docker container to a Linux server over SSH.
 
 - The pipeline builds a versioned Docker image and publishes it to the GitHub container registry (#22).
 - A deployment job in the release workflow connects to the server over SSH, sets up the runtime (a swap file and Docker), pulls the image of the released version and starts the container with a data volume (#23).
-- After the start, the workflow calls a health endpoint and fails if the application does not answer (#24, planned).
+- After the start, the deploy job calls the health endpoint from outside and fails the deployment if the application does not answer as healthy (#24).
 - Configuration is passed through environment variables, and credentials are stored as GitHub secrets, never in the repository.
 
 ## Server
