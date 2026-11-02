@@ -46,6 +46,7 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 - Workflow: issue → branch `type/<issue>-short-name` → small commits referencing the issue → pull request with `Closes #n` → CI green → squash merge → branch deleted automatically. Described in the [README](../README.md#workflow).
 - `main` is protected by the ruleset `Protect main`: pull request required, the `build-and-test` check required, force pushes and deletions blocked, empty bypass list.
 - Example: pull request [#3](https://github.com/TheVCrafter/isitdown/pull/3), squash merged as [`5ddd949`](https://github.com/TheVCrafter/isitdown/commit/5ddd949).
+- A release workflow ([workflow file](../.github/workflows/release.yml)) builds a Docker image when a version tag is pushed and publishes it to the GitHub container registry. The image is tagged with the version and the commit, and labelled with its source repository and commit hash, so it can be traced back to its source.
 
 ![Ruleset Protect main: name, enforcement status Active, empty bypass list and the target branch](images/c1-ruleset-main-targets.png)
 
@@ -55,7 +56,7 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 
 **Open**
 
-- Artifact management: a versioned build output created by the pipeline and linked to its source (#22).
+- A first published version, with a screenshot of the release run and the image in the registry (after the first tag).
 
 ## D1: Integration and testing
 
