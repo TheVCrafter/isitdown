@@ -6,7 +6,7 @@ A website monitoring tool (downdetector) written in TypeScript. School project f
 
 ## Status
 
-Project setup, CI pipeline and branch protection are done. A command line tool checks whether websites are up or down. A monitor repeats the checks on a configurable interval, stores the results in SQLite, and serves a history page with the uptime and the results of each monitored URL. An automated integration test checks the whole chain. A hosting decision is made (a Docker container on a Linux server); artifact publishing and automatic deployment are not implemented yet.
+Project setup, CI pipeline and branch protection are done. A command line tool checks whether websites are up or down. A monitor repeats the checks on a configurable interval, stores the results in SQLite, and serves a history page with the uptime and the results of each monitored URL. An automated integration test checks the whole chain. A hosting decision is made (a Docker container on a Linux server), and a release workflow publishes a versioned Docker image; automatic deployment is not implemented yet.
 
 ## Requirements
 
@@ -60,6 +60,16 @@ The monitor checks the URLs immediately and then repeatedly, stores every result
 | `DATABASE_PATH`          | Path of the SQLite database file     | `isitdown.db` |
 | `PORT`                   | Port of the history server           | `3000`        |
 
+## Docker image
+
+A release is created by pushing a version tag such as `v0.1.1`. The release workflow builds the image and publishes it to the GitHub container registry, tagged with the version and the commit.
+
+```bash
+docker run --rm -p 3000:3000 -v isitdown-data:/data ghcr.io/thevcrafter/isitdown:0.1.1 https://example.com
+```
+
+The URLs to monitor are passed as arguments. The database is stored in the volume `isitdown-data`, so the results survive restarts and new versions.
+
 ## Project structure
 
 ```
@@ -67,7 +77,7 @@ src/                        application code
 tests/                      unit tests (Vitest)
 tests/integration/          integration test with a local target server
 docs/                       decisions, evidence, hosting, TypeScript notes
-.github/workflows/          CI pipeline
+.github/workflows/          CI and release pipelines
 .github/ISSUE_TEMPLATE/     user story and task templates
 ```
 
@@ -84,6 +94,8 @@ docs/                       decisions, evidence, hosting, TypeScript notes
 ## CI
 
 GitHub Actions runs two jobs on every pull request and on every push to `main`. `build-and-test` runs the format check, lint, typecheck, build and the unit tests. `integration-test` runs the integration test on its own.
+
+A separate release workflow runs when a version tag is pushed and publishes the Docker image.
 
 ## Documentation
 
