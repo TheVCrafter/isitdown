@@ -1,6 +1,7 @@
 import { checkUrl } from "./check-url.js";
-import { readIntervalMs } from "./config.js";
+import { readIntervalMs, readPort } from "./config.js";
 import { startScheduler } from "./scheduler.js";
+import { createHistoryServer } from "./server.js";
 import { SqliteStorage } from "./sqlite-storage.js";
 import { validateUrl } from "./validate-url.js";
 
@@ -30,8 +31,10 @@ function main(): void {
   }
 
   let intervalMs: number;
+  let port: number;
   try {
     intervalMs = readIntervalMs(process.env.CHECK_INTERVAL_SECONDS);
+    port = readPort(process.env.PORT);
   } catch (error: unknown) {
     console.error(error instanceof Error ? error.message : String(error));
     process.exitCode = 1;
@@ -40,15 +43,28 @@ function main(): void {
 
   const storage = new SqliteStorage(process.env.DATABASE_PATH ?? "isitdown.db");
   const stop = startScheduler({ urls, intervalMs, storage, check: checkUrl });
+  const server = createHistoryServer(storage);
 
-  console.log(
-    `Monitoring ${urls.length} URL(s) every ${intervalMs / 1000} seconds. Press Ctrl+C to stop.`,
-  );
+  server.on("error", (error) => {
+    console.error(`Could not start the history server: ${error.message}`);
+    process.exitCode = 1;
+    stop();
+    storage.close();
+  });
+
+  server.listen(port, () => {
+    console.log(
+      `Monitoring ${urls.length} URL(s) every ${intervalMs / 1000} seconds. Press Ctrl+C to stop.`,
+    );
+    console.log(`History: http://localhost:${port}`);
+  });
 
   process.on("SIGINT", () => {
     stop();
-    storage.close();
-    console.log("Stopped.");
+    server.close(() => {
+      storage.close();
+      console.log("Stopped.");
+    });
   });
 }
 
