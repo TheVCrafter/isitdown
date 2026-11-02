@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "build": "tsc -p tsconfig.build.json",
     "test": "vitest run",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
     "start": "node dist/cli.js",
     "monitor": "node dist/monitor.js"
   },
