@@ -29,6 +29,11 @@ export function createHistoryServer(
         return;
       }
 
+      if (requestUrl.pathname === "/health") {
+        sendJson(response, 200, { status: "ok" });
+        return;
+      }
+
       if (requestUrl.pathname !== "/api/history") {
         sendJson(response, 404, { error: "Not found" });
         return;

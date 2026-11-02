@@ -80,6 +80,13 @@ describe("history server", () => {
     });
   });
 
+  it("answers the health check", async () => {
+    const response = await fetch(`${baseUrl}/health`);
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ status: "ok" });
+  });
+
   it("uses the default period when no period is given", async () => {
     await storage.save(resultAt("up", "2026-11-02T11:30:00.000Z"));
 
