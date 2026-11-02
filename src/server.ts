@@ -1,5 +1,6 @@
 import { createServer, type Server, type ServerResponse } from "node:http";
 import { buildHistoryReport } from "./history.js";
+import { HISTORY_PAGE } from "./page.js";
 import { parsePeriod } from "./periods.js";
 import type { ResultStorage } from "./storage.js";
 import { validateUrl } from "./validate-url.js";
@@ -22,8 +23,14 @@ export function createHistoryServer(
         return;
       }
 
+      if (requestUrl.pathname === "/") {
+        response.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+        response.end(HISTORY_PAGE);
+        return;
+      }
+
       if (requestUrl.pathname !== "/api/history") {
-        sendJson(response, 404, { error: "Only /api/history is available" });
+        sendJson(response, 404, { error: "Not found" });
         return;
       }
 

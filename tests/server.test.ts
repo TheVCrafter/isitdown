@@ -150,4 +150,12 @@ describe("history server", () => {
     expect(body).toContain("Internal server error");
     expect(body).not.toContain("disk full");
   });
+
+  it("serves the history page at the root path", async () => {
+    const response = await fetch(`${baseUrl}/`);
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-type")).toContain("text/html");
+    expect(await response.text()).toContain("IsItDown?");
+  });
 });
