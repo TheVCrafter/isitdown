@@ -54,9 +54,15 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 
 ![Pull request #3 merged and its branch deleted](images/c1-pr-merged.png)
 
+- First release: the tag `v0.1.1` started the release workflow, which published the image to the container registry with the tags `0.1.1`, `0.1`, `latest` and `sha-333019d`, the commit it was built from. The first tag, `v0.1.0`, failed because the Dockerfile was missing from the repository. It was added in a separate pull request, and the release was repeated with a new tag.
+
+![Successful release run for tag v0.1.1: the publish-image job and the Docker build summary](images/c1-release-run.png)
+
+![Package isitdown in the container registry: public, with the tags 0.1.1, 0.1, latest and sha-333019d](images/c1-package.png)
+
 **Open**
 
-- A first published version, with a screenshot of the release run and the image in the registry (after the first tag).
+- None for now. The deployed version will be shown after the first automatic deployment (#23).
 
 ## D1: Integration and testing
 
