@@ -4,6 +4,7 @@ export const HISTORY_PAGE = `<!doctype html>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>IsItDown?</title>
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono&amp;display=swap" rel="stylesheet" />
@@ -11,7 +12,8 @@ export const HISTORY_PAGE = `<!doctype html>
       :root { color-scheme: dark; }
       body { margin: 0; background: #0f1115; color: #e6e8eb; font: 16px/1.5 "Ubuntu Mono", ui-monospace, monospace; }
       main { max-width: 44rem; margin: 0 auto; padding: 3rem 1rem; }
-      h1 { margin: 0 0 1.5rem; font-size: 1.25rem; font-weight: 400; }
+      h1 { display: flex; align-items: center; gap: 0.75rem; margin: 0 0 1.5rem; font-size: 1.25rem; font-weight: 400; }
+      h1 img { height: 2.5rem; width: auto; }
       form { display: flex; flex-wrap: wrap; gap: 0.5rem; }
       input, select, button { font: inherit; color: inherit; background: #171a21; border: 1px solid #2a303c; border-radius: 6px; padding: 0.5rem 0.75rem; }
       input { flex: 1; min-width: 14rem; }
@@ -28,7 +30,7 @@ export const HISTORY_PAGE = `<!doctype html>
   </head>
   <body>
     <main>
-      <h1>IsItDown?</h1>
+      <h1><img src="/logo.svg" alt="" />IsItDown?</h1>
       <form id="form">
         <input id="url" type="url" required placeholder="https://example.com" />
         <select id="period">

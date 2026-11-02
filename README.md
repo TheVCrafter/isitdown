@@ -1,8 +1,14 @@
+<p align="center">
+  <img src="docs/images/logo.svg" alt="IsItDown? logo" width="160" />
+</p>
+
 # IsItDown?
 
 [![CI](https://github.com/TheVCrafter/isitdown/actions/workflows/ci.yml/badge.svg)](https://github.com/TheVCrafter/isitdown/actions/workflows/ci.yml)
 
 A website monitoring tool (downdetector) written in TypeScript. School project for module 324 (DevOps-Prozesse mit Tools unterstützen). The focus is the DevOps process around the app: requirements, source management, automated tests and delivery.
+
+Live demo: <http://140.238.213.184:3000/>
 
 ## Status
 
@@ -102,6 +108,7 @@ tests/                      unit tests (Vitest)
 tests/integration/          integration test with a local target server
 deploy/                     script that sets up and starts the app on the server
 docs/                       decisions, evidence, hosting, requirements tools, TypeScript notes
+docs/images/                screenshots and the project logo (logo.svg)
 .github/workflows/          CI and release pipelines
 .github/ISSUE_TEMPLATE/     user story and task templates
 .husky/                     pre-commit hook

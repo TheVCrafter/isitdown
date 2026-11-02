@@ -1,5 +1,6 @@
 import { createServer, type Server, type ServerResponse } from "node:http";
 import { buildHistoryReport } from "./history.js";
+import { LOGO_SVG } from "./logo.js";
 import { HISTORY_PAGE } from "./page.js";
 import { parsePeriod } from "./periods.js";
 import type { ResultStorage } from "./storage.js";
@@ -26,6 +27,12 @@ export function createHistoryServer(
       if (requestUrl.pathname === "/") {
         response.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
         response.end(HISTORY_PAGE);
+        return;
+      }
+
+      if (requestUrl.pathname === "/logo.svg") {
+        response.writeHead(200, { "Content-Type": "image/svg+xml" });
+        response.end(LOGO_SVG);
         return;
       }
 
