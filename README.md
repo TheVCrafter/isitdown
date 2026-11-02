@@ -6,7 +6,7 @@ A website monitoring tool (downdetector) written in TypeScript. School project f
 
 ## Status
 
-Project setup, CI pipeline and branch protection are done. A command line tool checks whether websites are up or down, and a monitor repeats the checks on a configurable interval and stores the results in SQLite. The history view, uptime, the integration test, artifact publishing and deployment are not implemented yet.
+Project setup, CI pipeline and branch protection are done. A command line tool checks whether websites are up or down, and a monitor repeats the checks on a configurable interval and stores the results in SQLite. The uptime calculation exists but is not shown to the user yet. The history view, the integration test, artifact publishing and deployment are not implemented yet.
 
 ## Requirements
 

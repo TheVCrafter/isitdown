@@ -29,3 +29,7 @@ Short notes on the setup choices and on what I learned while implementing.
 - **Async code:** `checkUrl` returns a `Promise<CheckResult>` and uses `await` on the request. Errors from `fetch` are caught with `try/catch`, and the caught value is `unknown`, so it is checked with `instanceof Error`.
 - **Injected dependencies:** `checkUrl` takes `fetchFn`, `now` and `timeoutMs` as options with defaults, so tests can pass fakes instead of using the network and the real clock.
 - **Result objects instead of exceptions:** `validateUrl` returns `{ valid, ... }` because invalid input is expected, not exceptional.
+- **Classes and interfaces:** `SqliteStorage` implements the `ResultStorage` interface, so TypeScript checks that it has every method with the right types.
+- **Runtime checks on `unknown` values:** values read from the database have broad types, so each column is checked (`typeof`, comparison with the allowed strings) before it is used. After the check, TypeScript treats the value as the narrower type.
+- **Two tsconfig files:** `tsconfig.json` is used by the editor and `typecheck` and includes the tests; `tsconfig.build.json` extends it and builds only `src`.
+- **Return type with `null`:** `calculateUptime` returns `number | null`, so callers must handle the "no data" case before they use the number.
