@@ -19,7 +19,8 @@ Short notes on the setup choices and on what I learned while implementing.
 
 - ESLint uses `typescript-eslint` with the recommended rules (flat config in `eslint.config.js`).
 - Prettier settings are in `.prettierrc`, with LF line endings.
-- Vitest runs the tests in `tests/`.
+- Vitest runs the tests in `tests/`. `vitest.config.ts` excludes `tests/integration`, and `vitest.integration.config.ts` includes only that folder, so the two kinds of test have separate commands.
+- Helper files such as `tests/helpers/target-server.ts` are not named `*.test.ts`, so Vitest does not run them as tests.
 
 ## Types and patterns used in the code
 
@@ -37,3 +38,4 @@ Short notes on the setup choices and on what I learned while implementing.
 - **`as const`:** the `PERIODS` object is read-only and its keys are literal types, which makes a lookup by a checked key a plain number.
 - **`??` for defaults:** `a ?? b` uses `b` only when `a` is `null` or `undefined`, so an empty string or `0` is kept. The monitor uses it for the database path.
 - **Promises and `await`:** forgetting `await` on a promise-returning call (for example `storage.save`) is not a type error, but errors then escape the `try/catch`. Each missing `await` found so far changed when errors surface, not only the result.
+- **Object types with methods:** the test helper returns a `TargetServer` object with a `baseUrl` and a `close()` function. The caller only sees what the type declares, not the server behind it.

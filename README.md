@@ -6,7 +6,7 @@ A website monitoring tool (downdetector) written in TypeScript. School project f
 
 ## Status
 
-Project setup, CI pipeline and branch protection are done. A command line tool checks whether websites are up or down. A monitor repeats the checks on a configurable interval, stores the results in SQLite, and serves a history page with the uptime and the results of each monitored URL. The integration test, artifact publishing and deployment are not implemented yet.
+Project setup, CI pipeline and branch protection are done. A command line tool checks whether websites are up or down. A monitor repeats the checks on a configurable interval, stores the results in SQLite, and serves a history page with the uptime and the results of each monitored URL. An automated integration test checks the whole chain. Artifact publishing and deployment are not implemented yet.
 
 ## Requirements
 
@@ -24,16 +24,17 @@ npm install
 
 ## Scripts
 
-| Script                 | Purpose                                          |
-| ---------------------- | ------------------------------------------------ |
-| `npm run lint`         | Lint with ESLint                                 |
-| `npm run format`       | Format all files with Prettier                   |
-| `npm run format:check` | Check formatting without change                  |
-| `npm run typecheck`    | Type check source and tests without emitting     |
-| `npm run build`        | Compile `src/` to `dist/`                        |
-| `npm run test`         | Run the tests once with Vitest                   |
-| `npm start`            | Run the compiled command line tool (after build) |
-| `npm run monitor`      | Run the monitor (after build)                    |
+| Script                     | Purpose                                            |
+| -------------------------- | -------------------------------------------------- |
+| `npm run lint`             | Lint with ESLint                                   |
+| `npm run format`           | Format all files with Prettier                     |
+| `npm run format:check`     | Check formatting without change                    |
+| `npm run typecheck`        | Type check source and tests without emitting       |
+| `npm run build`            | Compile `src/` to `dist/`                          |
+| `npm run test`             | Run the unit tests once with Vitest                |
+| `npm run test:integration` | Run the integration test (real storage and server) |
+| `npm start`                | Run the compiled command line tool (after build)   |
+| `npm run monitor`          | Run the monitor (after build)                      |
 
 ## Usage
 
@@ -63,7 +64,8 @@ The monitor checks the URLs immediately and then repeatedly, stores every result
 
 ```
 src/                        application code
-tests/                      tests (Vitest)
+tests/                      unit tests (Vitest)
+tests/integration/          integration test with a local target server
 docs/                       decisions, evidence, TypeScript notes
 .github/workflows/          CI pipeline
 .github/ISSUE_TEMPLATE/     user story and task templates
@@ -81,7 +83,7 @@ docs/                       decisions, evidence, TypeScript notes
 
 ## CI
 
-GitHub Actions runs format check, lint, typecheck, build and tests on every pull request and on every push to `main`.
+GitHub Actions runs two jobs on every pull request and on every push to `main`. `build-and-test` runs the format check, lint, typecheck, build and the unit tests. `integration-test` runs the integration test on its own.
 
 ## Documentation
 

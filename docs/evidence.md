@@ -10,7 +10,7 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 - Statuses: Backlog, Todo, In Progress, In Review, Done. The board workflows add new issues to Backlog and move them to Done when an issue is closed or its pull request is merged.
 - Issue templates for user stories and tasks, plus six labels (`user-story`, `feature`, `ci`, `docs`, `chore`, `bug`).
 - Three user stories with acceptance criteria: [#7](https://github.com/TheVCrafter/isitdown/issues/7) (check whether a website is up or down), [#8](https://github.com/TheVCrafter/isitdown/issues/8) (history and uptime) and [#9](https://github.com/TheVCrafter/isitdown/issues/9) (automated testing, build and deployment). Each story is broken into five sub-issues (#10 to #14, #15 to #19 and #20 to #24), so its progress is visible on the story. Three more issues (#25 to #27) cover the requirements tool comparison, the development environment extension and the final documentation.
-- Story #7 is finished: its sub-issues were closed by pull requests (#13 was closed with a comment that links to the tests that cover it), and the story was closed after its acceptance criteria were ticked.
+- Stories #7 and #8 are finished: their sub-issues were closed by pull requests (#13 was closed with a comment that links to the tests that cover it), and each story was closed with a comment that maps its acceptance criteria to the issues and code that cover them.
 - Traceability example: issue [#2](https://github.com/TheVCrafter/isitdown/issues/2) (CI workflow) → branch `ci/2-add-workflow` → pull request [#3](https://github.com/TheVCrafter/isitdown/pull/3) with `Closes #2` → merged → issue closed and moved to Done automatically.
 
 ![Project board with issues #1 and #2 in the Done column](images/a1-board-overview.png)
@@ -28,9 +28,10 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 
 **Done**
 
-- Node.js, TypeScript (strict), ESLint, Prettier, Vitest and npm scripts for `lint`, `format`, `format:check`, `typecheck`, `build` and `test`.
+- Node.js, TypeScript (strict), ESLint, Prettier, Vitest and npm scripts for `lint`, `format`, `format:check`, `typecheck`, `build`, `test` and `test:integration`.
 - Editor and line ending setup: `.editorconfig`, `.gitattributes`, `.prettierrc` and shared VS Code settings in `.vscode/settings.json`.
 - Two TypeScript configs: `tsconfig.json` covers `src` and `tests` for the editor and `typecheck`; `tsconfig.build.json` builds only `src`.
+- Two Vitest configs: `vitest.config.ts` runs the unit tests, and `vitest.integration.config.ts` runs only the integration test.
 - Setup steps for a fresh clone are in the [README](../README.md#setup); the reasons for the choices are in [decisions](decisions.md) and [TypeScript notes](typescript-notes.md).
 - Setup commit: [`56daa85`](https://github.com/TheVCrafter/isitdown/commit/56daa85).
 
@@ -66,6 +67,10 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 - Tests for the uptime calculation: an empty list and a list without results in the period return `null`; all up, all down, half up and two thirds up return 100, 0, 50 and 66.7; results older than the period and results after the current time are ignored; a result exactly at the start of the period counts; a failed check counts as down.
 - Tests for the history report and the selectable periods: the report contains only the results of the requested URL inside the period, newest first, with the matching uptime; the period names `1h`, `24h` and `7d` map to their durations, a missing period uses the default, and unknown names (including `constructor`) are rejected.
 - Tests for the history server start the real server on a free port and send real HTTP requests: the report for a stored URL, the default period, a URL without trailing slash, a missing or invalid URL, an unknown period, another path, a request that is not GET, the history page, and a failing storage that answers 500 without leaking the error message.
+- An automated integration test runs the real checker, a real SQLite storage and the real history server against a local target server with four routes: a working page, a server error (500), a redirect, and a page that never answers. It checks the whole chain from the check to the report: the working page is up with 100 percent uptime, the server error is down with HTTP 500, the redirect is followed and reported as up, and the hanging page becomes a failed result that is stored and reported. The test runs as its own job in the pipeline, next to the unit tests, and needs no internet access.
+
+![Pull request with two successful checks: build-and-test (required) and integration-test as a separate job](images/d1-ci-two-jobs.png)
+
 - A run of the monitor with a 5 second interval, followed by a query of the database: the stored results of both runs are in the same file, which shows that results survive a restart.
 
 ![Stored check results of two separate runs of the monitor, read from the SQLite database](images/d1-monitor-storage.png)
@@ -78,7 +83,7 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 
 ![History page showing the uptime and the results of a monitored URL](images/d1-history-page.png)
 
-- The pipeline runs format check, lint, typecheck, build and tests on every pull request and on every push to `main` ([workflow file](../.github/workflows/ci.yml)).
+- The pipeline runs two jobs on every pull request and on every push to `main`: `build-and-test` (format check, lint, typecheck, build and unit tests) and `integration-test` ([workflow file](../.github/workflows/ci.yml)).
 - A passing run on pull request #3:
 
 ![CI check build-and-test passed in 54 seconds on pull request #3](images/d1-ci-green.png)
@@ -89,7 +94,7 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 
 **Open**
 
-- An automated integration test that runs in the pipeline (#20).
+- None for now. The health check after a deployment is planned in #24 (E1).
 
 ## E1: Deployment
 
