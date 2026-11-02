@@ -60,9 +60,11 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 
 ![Package isitdown in the container registry: public, with the tags 0.1.1, 0.1, latest and sha-333019d](images/c1-package.png)
 
+- Release `v0.1.2` was published and deployed by the same workflow run, so the image that runs on the server is traceable to its tag and commit.
+
 **Open**
 
-- None for now. The deployed version will be shown after the first automatic deployment (#23).
+- None for now.
 
 ## D1: Integration and testing
 
@@ -109,8 +111,15 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 
 - The hosting options are compared in [hosting](hosting.md): a Docker container on a server over SSH, a container platform, the own computer with a self-hosted runner, and GitHub Pages. The decision is a Docker container on a Linux server, because the pipeline can then set up the whole runtime.
 - The server is an Oracle Cloud Always Free VM (Ubuntu 24.04, `x86_64`, 1 GB of memory). A key pair was created for the deployment, and the login with the key was tested.
+- Automatic deployment: when a version tag is pushed, the release workflow publishes the image and then a `deploy` job connects to the server over SSH and runs a setup script ([workflow file](../.github/workflows/release.yml), [script](../deploy/remote-deploy.sh)). The script creates a swap file, installs Docker, pulls the image of exactly that version, and starts the container with a persistent data volume. Every step checks first whether it is needed, so the script can run again on every deployment.
+- Configuration and secrets: the server address, the login user, the private key and the pinned host key are GitHub secrets, and the list of monitored websites is a repository variable. Nothing sensitive is in the repository.
+- Safety measures: strict host key checking, a strict pattern for the version and the URL list before they reach the server, secrets passed as environment variables, minimal permissions per job, and one deployment at a time.
+- The first deployment failed in the check of the URL list, because the variable was missing. The check stopped the run before anything reached the server, and the deployment was repeated after the variable was created.
+
+![Release run for v0.1.2 with both jobs, publish-image and deploy, successful](images/e1-deploy-run.png)
+
+![History page running on the server, showing the uptime and the results of a monitored website](images/e1-deployed-page.png)
 
 **Open**
 
-- Automatic deployment on merge or tag, including the runtime setup (#23).
 - Health endpoint and post-deployment check (#24).
