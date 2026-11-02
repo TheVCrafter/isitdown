@@ -35,10 +35,13 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 - Two Vitest configs: `vitest.config.ts` runs the unit tests, and `vitest.integration.config.ts` runs only the integration test.
 - Setup steps for a fresh clone are in the [README](../README.md#setup); the reasons for the choices are in [decisions](decisions.md) and [TypeScript notes](typescript-notes.md).
 - Setup commit: [`56daa85`](https://github.com/TheVCrafter/isitdown/commit/56daa85).
+- Extension of the development environment: a pre-commit hook (Husky and lint-staged) runs ESLint and Prettier on the staged files before every commit and adds the fixes to the commit. It is installed automatically by `npm install`. The reasons and the details are in [decisions](decisions.md) and the [README](../README.md#pre-commit-hook). A test commit with a badly formatted TypeScript file was rewritten by the hook inside the commit.
+
+![Terminal: a test commit with a badly formatted TypeScript file; lint-staged runs ESLint and Prettier on the staged file, and the committed file is the formatted version](images/b1-pre-commit-hook.png)
 
 **Open**
 
-- An extension beyond the basic setup (for example pre-commit hooks or a devcontainer), documented with its reason (#26).
+- None for now.
 
 ## C1: Source and artifact management
 

@@ -22,6 +22,12 @@ cd isitdown
 npm install
 ```
 
+## Pre-commit hook
+
+`npm install` installs a Git hook (Husky) that runs before every commit. It runs ESLint and Prettier on the staged TypeScript files and Prettier on the staged JSON, Markdown and YAML files, fixes what it can, and adds the fixes to the commit. A commit with an error that cannot be fixed is stopped.
+
+To skip the hook in an emergency, use `git commit --no-verify`. The same checks run in the pipeline, so a skipped hook does not let badly formatted code reach `main`.
+
 ## Scripts
 
 | Script                     | Purpose                                            |
@@ -98,6 +104,7 @@ deploy/                     script that sets up and starts the app on the server
 docs/                       decisions, evidence, hosting, requirements tools, TypeScript notes
 .github/workflows/          CI and release pipelines
 .github/ISSUE_TEMPLATE/     user story and task templates
+.husky/                     pre-commit hook
 ```
 
 ## Workflow
