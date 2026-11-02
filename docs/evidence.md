@@ -10,7 +10,8 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 - Statuses: Backlog, Todo, In Progress, In Review, Done. The board workflows add new issues to Backlog and move them to Done when an issue is closed or its pull request is merged.
 - Issue templates for user stories and tasks, plus six labels (`user-story`, `feature`, `ci`, `docs`, `chore`, `bug`).
 - Three user stories with acceptance criteria: [#7](https://github.com/TheVCrafter/isitdown/issues/7) (check whether a website is up or down), [#8](https://github.com/TheVCrafter/isitdown/issues/8) (history and uptime) and [#9](https://github.com/TheVCrafter/isitdown/issues/9) (automated testing, build and deployment). Each story is broken into five sub-issues (#10 to #14, #15 to #19 and #20 to #24), so its progress is visible on the story. Three more issues (#25 to #27) cover the requirements tool comparison, the development environment extension and the final documentation.
-- Stories #7 and #8 are finished: their sub-issues were closed by pull requests (#13 was closed with a comment that links to the tests that cover it), and each story was closed with a comment that maps its acceptance criteria to the issues and code that cover them.
+- All three stories are finished: their sub-issues were closed by pull requests (#13 was closed with a comment that links to the tests that cover it), and each story was closed with a comment that maps its acceptance criteria to the issues and code that cover them.
+- Each story has a milestone that groups the story and its five sub-issues: "Story #7: Check whether a website is up or down", "Story #8: History and uptime" and "Story #9: Test, build and deploy". The issues #25 to #27 belong to the milestone "Documentation and tooling". The finished milestones are closed.
 - Traceability example: issue [#2](https://github.com/TheVCrafter/isitdown/issues/2) (CI workflow) → branch `ci/2-add-workflow` → pull request [#3](https://github.com/TheVCrafter/isitdown/pull/3) with `Closes #2` → merged → issue closed and moved to Done automatically.
 
 ![Project board with issues #1 and #2 in the Done column](images/a1-board-overview.png)
@@ -19,11 +20,13 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 
 ![Repository labels with descriptions](images/a1-labels.png)
 
+![Board column Done with the stories #7, #8 and #9, each with five of five sub-issues closed](images/a1-board-stories.png)
+
 - Comparison of requirements management tools: GitHub Projects, Jira and Trello are compared on the link to the code, the structure of requirements, automation, visibility, and cost and setup. The recommendation is GitHub Projects, because the requirements and the code are in the same system. The comparison is in [requirements tools](requirements-tools.md), with the date the plan limits were checked and its sources.
 
 **Open**
 
-- A board screenshot that shows the stories with their sub-issues and progress.
+- None.
 
 ## B1: Development environment
 
@@ -41,7 +44,7 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 
 **Open**
 
-- None for now.
+- None.
 
 ## C1: Source and artifact management
 
@@ -68,7 +71,7 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 
 **Open**
 
-- None for now.
+- None.
 
 ## D1: Integration and testing
 
@@ -107,7 +110,7 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 
 **Open**
 
-- None for now.
+- None.
 
 ## E1: Deployment
 
@@ -130,4 +133,4 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 
 **Open**
 
-- None for now.
+- None.
