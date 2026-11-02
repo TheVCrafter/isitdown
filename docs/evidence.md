@@ -98,4 +98,12 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 
 ## E1: Deployment
 
-Not started yet. Planned in #21 (hosting decision), #23 (automatic deployment) and #24 (health check).
+**Done**
+
+- The hosting options are compared in [hosting](hosting.md): a Docker container on a server over SSH, a container platform, the own computer with a self-hosted runner, and GitHub Pages. The decision is a Docker container on a Linux server, because the pipeline can then set up the whole runtime.
+- The server is an Oracle Cloud Always Free VM (Ubuntu 24.04, `x86_64`, 1 GB of memory). A key pair was created for the deployment, and the login with the key was tested.
+
+**Open**
+
+- Automatic deployment on merge or tag, including the runtime setup (#23).
+- Health endpoint and post-deployment check (#24).

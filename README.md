@@ -6,7 +6,7 @@ A website monitoring tool (downdetector) written in TypeScript. School project f
 
 ## Status
 
-Project setup, CI pipeline and branch protection are done. A command line tool checks whether websites are up or down. A monitor repeats the checks on a configurable interval, stores the results in SQLite, and serves a history page with the uptime and the results of each monitored URL. An automated integration test checks the whole chain. Artifact publishing and deployment are not implemented yet.
+Project setup, CI pipeline and branch protection are done. A command line tool checks whether websites are up or down. A monitor repeats the checks on a configurable interval, stores the results in SQLite, and serves a history page with the uptime and the results of each monitored URL. An automated integration test checks the whole chain. A hosting decision is made (a Docker container on a Linux server); artifact publishing and automatic deployment are not implemented yet.
 
 ## Requirements
 
@@ -66,7 +66,7 @@ The monitor checks the URLs immediately and then repeatedly, stores every result
 src/                        application code
 tests/                      unit tests (Vitest)
 tests/integration/          integration test with a local target server
-docs/                       decisions, evidence, TypeScript notes
+docs/                       decisions, evidence, hosting, TypeScript notes
 .github/workflows/          CI pipeline
 .github/ISSUE_TEMPLATE/     user story and task templates
 ```
@@ -89,6 +89,7 @@ GitHub Actions runs two jobs on every pull request and on every push to `main`. 
 
 - [Decisions](docs/decisions.md)
 - [Evidence per competency](docs/evidence.md)
+- [Hosting](docs/hosting.md)
 - [TypeScript notes](docs/typescript-notes.md)
 
 ## License
