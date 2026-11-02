@@ -6,7 +6,7 @@ A website monitoring tool (downdetector) written in TypeScript. School project f
 
 ## Status
 
-Project setup, CI pipeline and branch protection are done. A command line tool checks whether websites are up or down, and a monitor repeats the checks on a configurable interval and stores the results in SQLite. The uptime calculation exists but is not shown to the user yet. The history view, the integration test, artifact publishing and deployment are not implemented yet.
+Project setup, CI pipeline and branch protection are done. A command line tool checks whether websites are up or down. A monitor repeats the checks on a configurable interval, stores the results in SQLite, and serves a history page with the uptime and the results of each monitored URL. The integration test, artifact publishing and deployment are not implemented yet.
 
 ## Requirements
 
@@ -51,12 +51,13 @@ npm run build
 npm run monitor -- https://example.com https://github.com
 ```
 
-The monitor checks the URLs immediately and then repeatedly, and stores every result in a SQLite database. Press Ctrl+C to stop it.
+The monitor checks the URLs immediately and then repeatedly, stores every result in a SQLite database, and serves a history page at `http://localhost:3000`. Enter a monitored URL and a period to see its uptime and results. The same data is available as JSON at `/api/history?url=<url>&period=<1h|24h|7d>`. Press Ctrl+C to stop it.
 
 | Variable                 | Meaning                              | Default       |
 | ------------------------ | ------------------------------------ | ------------- |
 | `CHECK_INTERVAL_SECONDS` | Seconds between two rounds of checks | `300`         |
 | `DATABASE_PATH`          | Path of the SQLite database file     | `isitdown.db` |
+| `PORT`                   | Port of the history server           | `3000`        |
 
 ## Project structure
 

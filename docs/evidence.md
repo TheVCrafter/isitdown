@@ -62,8 +62,10 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 
 - Unit tests for the check logic (status rule, URL validation, the check with fake `fetch` functions for 2xx, 3xx, 4xx, 5xx, network error and timeout, and the output format). None of them use the real network.
 - Tests for the SQLite storage use an in-memory database: a responded and a failed result come back unchanged, the history is newest first, results are separated by URL, and an unknown URL returns an empty list. One test uses a temporary file database to show that results survive closing and reopening it.
-- Tests for the configuration and the scheduler: the interval setting accepts valid values and rejects invalid ones; the scheduler runs a round immediately, runs again after one interval, stops when asked, skips a tick while a round is still running, and reports a failing check or save without stopping the other URLs. The scheduler tests use fake timers and an in-memory storage.
+- Tests for the configuration and the scheduler: the interval and port settings accept valid values and reject invalid ones; the scheduler runs a round immediately, runs again after one interval, stops when asked, skips a tick while a round is still running, and reports a failing check or save without stopping the other URLs. The scheduler tests use fake timers and an in-memory storage.
 - Tests for the uptime calculation: an empty list and a list without results in the period return `null`; all up, all down, half up and two thirds up return 100, 0, 50 and 66.7; results older than the period and results after the current time are ignored; a result exactly at the start of the period counts; a failed check counts as down.
+- Tests for the history report and the selectable periods: the report contains only the results of the requested URL inside the period, newest first, with the matching uptime; the period names `1h`, `24h` and `7d` map to their durations, a missing period uses the default, and unknown names (including `constructor`) are rejected.
+- Tests for the history server start the real server on a free port and send real HTTP requests: the report for a stored URL, the default period, a URL without trailing slash, a missing or invalid URL, an unknown period, another path, a request that is not GET, the history page, and a failing storage that answers 500 without leaking the error message.
 - A run of the monitor with a 5 second interval, followed by a query of the database: the stored results of both runs are in the same file, which shows that results survive a restart.
 
 ![Stored check results of two separate runs of the monitor, read from the SQLite database](images/d1-monitor-storage.png)
@@ -71,6 +73,10 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 - Demonstration of the story "Check whether a website is up or down":
 
 ![Command line run showing an up result, a down result with its error, a rejected input and the usage hint](images/d1-cli-output.png)
+
+- Demonstration of the story "See the history and uptime of a monitored website": the page shows the uptime and the list of results of a monitored URL.
+
+![History page showing the uptime and the results of a monitored URL](images/d1-history-page.png)
 
 - The pipeline runs format check, lint, typecheck, build and tests on every pull request and on every push to `main` ([workflow file](../.github/workflows/ci.yml)).
 - A passing run on pull request #3:
