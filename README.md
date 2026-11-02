@@ -5,6 +5,10 @@
 # IsItDown?
 
 [![CI](https://github.com/TheVCrafter/isitdown/actions/workflows/ci.yml/badge.svg)](https://github.com/TheVCrafter/isitdown/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/TheVCrafter/isitdown)](https://github.com/TheVCrafter/isitdown/releases)
+[![License: MIT](https://img.shields.io/github/license/TheVCrafter/isitdown)](LICENSE)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D24-339933?logo=node.js&logoColor=white)](package.json)
+[![Docker image](https://img.shields.io/badge/ghcr.io-isitdown-2496ED?logo=docker&logoColor=white)](https://github.com/TheVCrafter/isitdown/pkgs/container/isitdown)
 
 A website monitoring tool (downdetector) written in TypeScript. School project for module 324 (DevOps-Prozesse mit Tools unterstützen). The focus is the DevOps process around the app: requirements, source management, automated tests and delivery.
 
