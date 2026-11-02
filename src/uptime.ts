@@ -1,5 +1,21 @@
 import type { CheckResult } from "./check-result.js";
 
+// Returns the results whose time lies within the last periodMs milliseconds
+// up to and including now. Both ends of the period are included.
+export function resultsInPeriod(
+  results: readonly CheckResult[],
+  now: Date,
+  periodMs: number,
+): CheckResult[] {
+  const end = now.getTime();
+  const start = end - periodMs;
+
+  return results.filter((result) => {
+    const time = new Date(result.checkedAt).getTime();
+    return time >= start && time <= end;
+  });
+}
+
 // Returns the share of "up" results within the last periodMs milliseconds,
 // as a percentage from 0 to 100, or null when there are no results in that period.
 export function calculateUptime(
@@ -7,13 +23,7 @@ export function calculateUptime(
   now: Date,
   periodMs: number,
 ): number | null {
-  const end = now.getTime();
-  const start = end - periodMs;
-
-  const inPeriod = results.filter((result) => {
-    const time = new Date(result.checkedAt).getTime();
-    return time >= start && time <= end;
-  });
+  const inPeriod = resultsInPeriod(results, now, periodMs);
 
   if (inPeriod.length === 0) {
     return null;
