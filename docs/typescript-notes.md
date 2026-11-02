@@ -33,3 +33,7 @@ Short notes on the setup choices and on what I learned while implementing.
 - **Runtime checks on `unknown` values:** values read from the database have broad types, so each column is checked (`typeof`, comparison with the allowed strings) before it is used. After the check, TypeScript treats the value as the narrower type.
 - **Two tsconfig files:** `tsconfig.json` is used by the editor and `typecheck` and includes the tests; `tsconfig.build.json` extends it and builds only `src`.
 - **Return type with `null`:** `calculateUptime` returns `number | null`, so callers must handle the "no data" case before they use the number.
+- **Type predicates:** `isPeriodName` returns `value is keyof typeof PERIODS`, so after the check TypeScript knows the string is one of the valid period names.
+- **`as const`:** the `PERIODS` object is read-only and its keys are literal types, which makes a lookup by a checked key a plain number.
+- **`??` for defaults:** `a ?? b` uses `b` only when `a` is `null` or `undefined`, so an empty string or `0` is kept. The monitor uses it for the database path.
+- **Promises and `await`:** forgetting `await` on a promise-returning call (for example `storage.save`) is not a type error, but errors then escape the `try/catch`. Each missing `await` found so far changed when errors surface, not only the result.
