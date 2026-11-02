@@ -7,11 +7,13 @@ on:
 
 permissions:
   contents: read
-  packages: write
 
 jobs:
   publish-image:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Check out repository
         uses: actions/checkout@v5
@@ -43,3 +45,54 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  deploy:
+    needs: publish-image
+    runs-on: ubuntu-latest
+    environment: production
+    concurrency: deploy-production
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Check the version
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          VERSION="${TAG#v}"
+          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "The tag is not a plain version: $TAG" >&2
+            exit 1
+          fi
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+
+      - name: Check the list of URLs
+        env:
+          MONITOR_URLS: ${{ vars.MONITOR_URLS }}
+        run: |
+          if ! [[ "$MONITOR_URLS" =~ ^[A-Za-z0-9:/._~?\&=%@+,-]+( [A-Za-z0-9:/._~?\&=%@+,-]+)*$ ]]; then
+            echo "MONITOR_URLS is empty or contains characters that are not allowed" >&2
+            exit 1
+          fi
+
+      - name: Prepare the SSH connection
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+      - name: Deploy to the server
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          MONITOR_URLS: ${{ vars.MONITOR_URLS }}
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+            -o UserKnownHostsFile=~/.ssh/known_hosts \
+            -o StrictHostKeyChecking=yes \
+            "$DEPLOY_USER@$DEPLOY_HOST" \
+            "VERSION='$VERSION' MONITOR_URLS='$MONITOR_URLS' bash -s" < deploy/remote-deploy.sh
