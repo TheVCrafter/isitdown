@@ -63,6 +63,7 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 - Unit tests for the check logic (status rule, URL validation, the check with fake `fetch` functions for 2xx, 3xx, 4xx, 5xx, network error and timeout, and the output format). None of them use the real network.
 - Tests for the SQLite storage use an in-memory database: a responded and a failed result come back unchanged, the history is newest first, results are separated by URL, and an unknown URL returns an empty list. One test uses a temporary file database to show that results survive closing and reopening it.
 - Tests for the configuration and the scheduler: the interval setting accepts valid values and rejects invalid ones; the scheduler runs a round immediately, runs again after one interval, stops when asked, skips a tick while a round is still running, and reports a failing check or save without stopping the other URLs. The scheduler tests use fake timers and an in-memory storage.
+- Tests for the uptime calculation: an empty list and a list without results in the period return `null`; all up, all down, half up and two thirds up return 100, 0, 50 and 66.7; results older than the period and results after the current time are ignored; a result exactly at the start of the period counts; a failed check counts as down.
 - A run of the monitor with a 5 second interval, followed by a query of the database: the stored results of both runs are in the same file, which shows that results survive a restart.
 
 ![Stored check results of two separate runs of the monitor, read from the SQLite database](images/d1-monitor-storage.png)
@@ -82,7 +83,6 @@ Evidence per competency band. Each section lists what exists, where to find it, 
 
 **Open**
 
-- Tests for uptime (#18).
 - An automated integration test that runs in the pipeline (#20).
 
 ## E1: Deployment
